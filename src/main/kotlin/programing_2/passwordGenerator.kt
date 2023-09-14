@@ -3,89 +3,83 @@ package progr2aming_2
 import i
 import kotlin.random.Random
 
-//i made sure to use a lot of arrays here
 fun passwordGenerator() {
 
     var password:String = "" //making the password variable
 
     //checking if the user wants special Characters
     println("do you want special Characters in your password")
-    val wantSC: Boolean = readln() == "yes" //basically what this dose if(input == "yes") then wantSC = true
+    val  specialCharacters: Boolean = readln() == "yes" //if(input == "yes") then, specialCharacters = true
 
     //asking how long the password is to be
-    println("how long do you want the password to be? 1 2 or 3 times as long")
+    println("how long do you want the password to be? 1 2 or 3")
     var length: Int = readln().toInt()
 
 
 
-    while(length != 0) {
-        val seed = makeSeed()
-        i = 3
+    while(length != 0) { // this runs until the "length" variable runs out
 
-        while (i != -1) {
-            if (wantSC) {
+        val seed = makeSeed()//makes a seed every time this part of the code is run
+
+        i = 3 // sets the counter to 3, why 3 and not 4? because arrays start at 0 and i'm using it for that
+
+        while (i != -1) { // while counter isnt -1 repeat this
+
+            //if a user wants special Characters
+            if (specialCharacters) {
                 when (seed[i]) {
-                    "1" -> password = (password + getPartOfDataBase("nouns"))
-                    "2" -> password = (password + getPartOfDataBase("adjectives"))
-                    "3" -> password = (password + getPartOfDataBase("special characters"))
-                    "4" -> password = (password + random(100, 999999999).toString())
+                    "1" -> password = (password + getDataBaseRandomVal("nouns")) // adds a random noun from the database to the "password" variable
+                    "2" -> password = (password + getDataBaseRandomVal("adjectives")) // adds a random adjective from the database to the "password" variable
+                    "3" -> password = (password + getDataBaseRandomVal("special characters")) //adds a random special character from the database to the "password" variable
+                    "4" -> password = (password + random(100, 999999999).toString()) // adds a random number to the "password" variable
                 }
 
+            // if the user does not want special Characters
             }else{
                 when (seed[i]) {
-                    "1" -> password = (password + getPartOfDataBase("nouns"))
-                    "2" -> password = (password + getPartOfDataBase("adjectives"))
-                    "3" -> password = (password + random(10, 999999999).toString())
-                    "4" -> password = (password + random(10, 999999999).toString())
+                    "1" -> password = (password + getDataBaseRandomVal("nouns"))// adds a random noun from the database to the "password" variable
+                    "2" -> password = (password + getDataBaseRandomVal("adjectives"))// adds a random adjective from the database to the "password" variable
+                    "3" -> password = (password + random(100, 999999999).toString())// adds a random number to the "password" variable
+                    "4" -> password = (password + random(100, 999999999).toString())// adds a random number to the "password" variable
                 }
             }
-            i -= 1
-
+            i -= 1//decreases the counter variable by 1
         }
-
-    length -= 1
+    length -= 1 //decreases the length variable by 1
     }
-    println(password)
+    println(password)//prints the password variable
 }
 
-//hopefully this will make the rest of the code easier to read
-private fun getPartOfDataBase(type: String):String { //this is private because its only useful fot this file
-    val dataBasePull = getDatabase(type)
-    return when (type) {
-        "nouns" -> dataBasePull[random(0,1523)]
-        "adjectives" -> dataBasePull[random(0,897)]
-        "special characters" -> {dataBasePull[random(0, 5)]}
-        else -> {"ERROR"}
-    }
-}
-
-//making a seed
-fun makeSeed(): Array<String> {
-    ( when (random(1,4)) {
-            1 -> return arrayOf("1","2","3","4")
-            2 -> return arrayOf("2","3","4","1")
-            3 -> return arrayOf("3","4","1","2")
-            4 -> return arrayOf("4","3","2","1")
-            else -> {return arrayOf("1","2","3","4")}
+fun makeSeed(): Array<String> { //makes a seed
+    return when (random(1,4)) { //gets a random number between 1 and 4, and returns the corresponding array
+        1 -> arrayOf("1","2","3","4") // if the random number is 1, then it returns an array of "1, 2, 3, 4"
+        2 -> arrayOf("2","3","4","1") // if the random number is 2, then it returns an array of "2, 3, 4, 1"
+        3 -> arrayOf("3","4","1","2") // if the random number is 3, then it returns an array of "3, 4, 1, 2"
+        4 -> arrayOf("4","3","2","1") // if the random number is 4, then it returns an array of "4, 3, 2, 1"
+        else -> {
+            arrayOf("[ERROR] when making a seed") // if the function fails, it will return this error
         }
-    )
-
-}
-
-
-fun random (from: Int, until: Int):Int {return Random.nextInt(from, until)} // got lazy with typing random.nextInt
-
-
-//this takes a list of inputs and converts it into an array 
-fun convertListToArrayInput() {
-    while (true) {
-        val input = readln()
-        val inputArray = input.split("    r")
-        println("\"" + inputArray[0].removePrefix("    ")  + "\",")
     }
 }
+//creating a random number
+fun random (from: Int, until: Int):Int { // got lazy with typing random.nextInt so I made this function to speed it up
+    return Random.nextInt(from, until) // the parameters "form" and "until are passed into a random.nextInt funtion
+}
+
+
+fun convertListToArrayInput() { //this takes a list of inputs and converts it into an array
+    while (true) { //gos though all the inputs
+        val input = readln().split("    r")// slits the use input into an array 1 word per array element
+        println("\"" + input[0].removePrefix("    ")  + "\",")// this adds the required syntax for arrays
+        // btw I made this but do not understand it (no source completely my code)
+    }
+}
+
+
 //2.5k words for the password maker 
-private fun getDatabase(type: String): Array<String> {
+private fun getDataBaseRandomVal(type: String): String {
+
+    //"databases" aka arrays of words and Characters
     val specialCharacters = arrayOf("%","!","#","$","&","*")
 
     val nouns = arrayOf(
@@ -2512,10 +2506,11 @@ private fun getDatabase(type: String): Array<String> {
         "Inefficient",
         "Inconsistent")
 
-    return when (type.lowercase()) {
-        "nouns" -> nouns
-        "adjectives" -> adjectives
-        "special characters" -> specialCharacters
-        else -> {arrayOf("error")}
+
+    return when (type.lowercase()) {//returns a random value form one of the arrays. which array is picked depends on the parameter "type"
+        "nouns" -> nouns[random(0, nouns.size)] //gets random value form the "nouns" array
+        "adjectives" -> adjectives[random(0, adjectives.size)] //gets random value form the "adjectives" array
+        "special characters" -> specialCharacters[random(0, specialCharacters.size)] //gets random value form the "special characters" array
+        else -> ("[ERROR] when retuning the database")// if the function fails, it will return this error
     }
 }

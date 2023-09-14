@@ -3,7 +3,7 @@ import progr2aming_2.passwordGenerator
 import programing_2.*
 
 fun main() {
- timesTable()
+ passwordGenerator()
 }
 
 var i = 0
